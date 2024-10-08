@@ -42,7 +42,7 @@ public class CustomerDTO {
     /**
      * Unique identifier for the customer.
      */
-    private Integer id;
+    private String id;
 
     /**
      * Name of the customer.

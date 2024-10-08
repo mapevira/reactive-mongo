@@ -31,6 +31,6 @@ public interface BeerService {
      * @param beerDTO the BeerDTO containing the details of the beer to create
      * @return a Mono emitting the created BeerDTO
      */
-    Mono<BeerDTO> createNewBeer(BeerDTO beerDTO);
+    Mono<BeerDTO> createNewBeer(Mono<BeerDTO> beerDTO);
 
 }

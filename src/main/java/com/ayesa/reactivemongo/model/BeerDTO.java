@@ -47,7 +47,7 @@ public class BeerDTO {
     /**
      * Unique identifier for the beer.
      */
-    private Integer id;
+    private String id;
 
     /**
      * Name of the beer.
