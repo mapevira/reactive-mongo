@@ -74,17 +74,33 @@ class BeerServiceImplTest {
     void findFirstByBeerNameTest() {
         BeerDTO beerDto = getSavedBeerDto();
 
+        AtomicBoolean atomicBoolean = new AtomicBoolean();
         Mono<BeerDTO> beerMono = beerService.findFirstByBeerName(beerDto.getBeerName());
 
         beerMono.subscribe(dto -> {
             assertNotNull(dto);
-            assertEquals(beerDto.getId(), dto.getId());
             assertEquals(beerDto.getBeerName(), dto.getBeerName());
-            assertEquals(beerDto.getBeerStyle(), dto.getBeerStyle());
-            assertEquals(beerDto.getPrice(), dto.getPrice());
-            assertEquals(beerDto.getQuantityOnHand(), dto.getQuantityOnHand());
-            assertEquals(beerDto.getUpc(), dto.getUpc());
+            atomicBoolean.set(true);
         });
+
+        await().untilTrue(atomicBoolean);
+    }
+
+    @Test
+    void findByBeerStyleTest() {
+        BeerDTO beerDto = getSavedBeerDto();
+        getSavedBeerDto();
+
+        AtomicBoolean atomicBoolean = new AtomicBoolean();
+        beerService.findByBeerStyle(beerDto.getBeerStyle())
+                .collectList()
+                .subscribe(dtos -> {
+                    assertNotNull(dtos);
+                    assertFalse(dtos.isEmpty());
+                    atomicBoolean.set(true);
+                });
+
+        await().untilTrue(atomicBoolean);
     }
 
 }

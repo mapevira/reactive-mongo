@@ -1,6 +1,7 @@
 package com.ayesa.reactivemongo.services;
 
 import com.ayesa.reactivemongo.model.BeerDTO;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -40,5 +41,13 @@ public interface BeerService {
      * @return a Mono emitting the BeerDTO if found, or empty if not found
      */
     Mono<BeerDTO> findFirstByBeerName(String beerName);
+
+    /**
+     * Retrieves a BeerDTO by its style.
+     *
+     * @param beerStyle the style of the beer to retrieve
+     * @return a Flux emitting the BeerDTOs with the given style
+     */
+    Flux<BeerDTO> findByBeerStyle(String beerStyle);
 
 }

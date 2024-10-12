@@ -5,6 +5,7 @@ import com.ayesa.reactivemongo.model.BeerDTO;
 import com.ayesa.reactivemongo.repositories.BeerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -56,6 +57,18 @@ public class BeerServiceImpl implements BeerService {
     @Override
     public Mono<BeerDTO> findFirstByBeerName(final String beerName) {
         return beerRepository.findFirstByBeerName(beerName)
+                .map(beerMapper::beerToBeerDTO);
+    }
+
+    /**
+     * Retrieves a BeerDTO by its style.
+     *
+     * @param beerStyle the style of the beer to retrieve
+     * @return a Flux emitting the BeerDTOs with the given style
+     */
+    @Override
+    public Flux<BeerDTO> findByBeerStyle(String beerStyle) {
+        return beerRepository.findByBeerStyle(beerStyle)
                 .map(beerMapper::beerToBeerDTO);
     }
 
