@@ -1,6 +1,5 @@
 package com.ayesa.reactivemongo.services;
 
-import com.ayesa.reactivemongo.domain.Beer;
 import com.ayesa.reactivemongo.mappers.BeerMapper;
 import com.ayesa.reactivemongo.model.BeerDTO;
 import com.ayesa.reactivemongo.repositories.BeerRepository;
@@ -46,6 +45,18 @@ public class BeerServiceImpl implements BeerService {
         return beerDTO.map(beerMapper::beerDTOToBeer)
                 .flatMap(beerRepository::save)
                         .map(beerMapper::beerToBeerDTO);
+    }
+
+    /**
+     * Retrieves a BeerDTO by its name.
+     *
+     * @param beerName the name of the beer to retrieve
+     * @return a Mono emitting the BeerDTO if found, or empty if not found
+     */
+    @Override
+    public Mono<BeerDTO> findFirstByBeerName(final String beerName) {
+        return beerRepository.findFirstByBeerName(beerName)
+                .map(beerMapper::beerToBeerDTO);
     }
 
 }

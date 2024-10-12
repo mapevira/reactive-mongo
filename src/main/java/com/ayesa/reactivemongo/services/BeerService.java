@@ -33,4 +33,12 @@ public interface BeerService {
      */
     Mono<BeerDTO> createNewBeer(Mono<BeerDTO> beerDTO);
 
+    /**
+     * Retrieves a BeerDTO by its name.
+     *
+     * @param beerName the name of the beer to retrieve
+     * @return a Mono emitting the BeerDTO if found, or empty if not found
+     */
+    Mono<BeerDTO> findFirstByBeerName(String beerName);
+
 }

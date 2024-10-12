@@ -2,6 +2,7 @@ package com.ayesa.reactivemongo.repositories;
 
 import com.ayesa.reactivemongo.domain.Beer;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import reactor.core.publisher.Mono;
 
 /**
  * Repository interface for Beer entities.
@@ -16,4 +17,7 @@ import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
  * @since jdk 1.21
  */
 public interface BeerRepository extends ReactiveMongoRepository<Beer, String> {
+
+    Mono<Beer> findFirstByBeerName(String beerName);
+
 }
