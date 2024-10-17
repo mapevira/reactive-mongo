@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 /**
@@ -30,5 +31,16 @@ public class BeerHandler {
         String beerId = request.pathVariable("beerId");
         return ServerResponse.ok()
                 .body(beerService.getBeerById(beerId), BeerDTO.class);
+    }
+
+    public Mono<ServerResponse> createNewBeer(ServerRequest request) {
+        Mono<BeerDTO> beerDTOMono = request.bodyToMono(BeerDTO.class);
+        return beerService.createNewBeer(beerDTOMono)
+                .flatMap(beerDTO -> ServerResponse
+                        .created(UriComponentsBuilder
+                                .fromPath("http://localhost:8080" + BeerRouterConfig.BEER_PATH_ID)
+                                .build(beerDTO.getId()))
+                        .build());
+
     }
 }
