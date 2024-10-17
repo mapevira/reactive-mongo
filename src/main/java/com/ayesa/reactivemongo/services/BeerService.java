@@ -56,4 +56,14 @@ public interface BeerService {
      * @return a Flux emitting all BeerDTOs
      */
     Flux<BeerDTO> listBeers();
+
+    /**
+     * Updates a Beer entity with the given ID using the details in the given BeerDTO.
+     *
+     * @param beerId the ID of the beer to update
+     * @param beerDTO the BeerDTO containing the details to update
+     * @return a Mono emitting the updated BeerDTO
+     */
+    Mono<BeerDTO> updateBeer(String beerId, BeerDTO beerDTO);
+
 }

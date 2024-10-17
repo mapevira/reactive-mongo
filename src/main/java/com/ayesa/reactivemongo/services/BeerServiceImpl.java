@@ -83,4 +83,25 @@ public class BeerServiceImpl implements BeerService {
                 .map(beerMapper::beerToBeerDTO);
     }
 
+    /**
+     * Updates a Beer entity with the given ID using the details in the given BeerDTO.
+     *
+     * @param beerId the ID of the beer to update
+     * @param beerDTO the BeerDTO containing the details to update
+     * @return a Mono emitting the updated BeerDTO
+     */
+    @Override
+    public Mono<BeerDTO> updateBeer(String beerId, BeerDTO beerDTO) {
+        return beerRepository.findById(beerId)
+                .map(beer -> {
+                    beer.setBeerName(beerDTO.getBeerName());
+                    beer.setBeerStyle(beerDTO.getBeerStyle());
+                    beer.setPrice(beerDTO.getPrice());
+                    beer.setUpc(beerDTO.getUpc());
+                    beer.setQuantityOnHand(beerDTO.getQuantityOnHand());
+                    return beer;
+                })
+                .flatMap(beerRepository::save)
+                .map(beerMapper::beerToBeerDTO);
+    }
 }
