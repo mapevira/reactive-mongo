@@ -50,4 +50,10 @@ public interface BeerService {
      */
     Flux<BeerDTO> findByBeerStyle(String beerStyle);
 
+    /**
+     * Retrieves all BeerDTOs.
+     *
+     * @return a Flux emitting all BeerDTOs
+     */
+    Flux<BeerDTO> listBeers();
 }

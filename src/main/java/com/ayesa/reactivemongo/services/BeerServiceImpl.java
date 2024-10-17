@@ -72,4 +72,15 @@ public class BeerServiceImpl implements BeerService {
                 .map(beerMapper::beerToBeerDTO);
     }
 
+    /**
+     * Retrieves all BeerDTOs.
+     *
+     * @return a Flux emitting all BeerDTOs
+     */
+    @Override
+    public Flux<BeerDTO> listBeers() {
+        return beerRepository.findAll()
+                .map(beerMapper::beerToBeerDTO);
+    }
+
 }
