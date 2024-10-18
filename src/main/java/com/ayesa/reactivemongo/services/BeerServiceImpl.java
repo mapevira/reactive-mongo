@@ -137,4 +137,15 @@ public class BeerServiceImpl implements BeerService {
                 .map(beerMapper::beerToBeerDTO);
     }
 
+    /**
+     * Deletes a Beer entity with the given ID.
+     *
+     * @param beerId the ID of the beer to delete
+     * @return a Mono emitting the deleted BeerDTO
+     */
+    @Override
+    public Mono<Void> deleteBeerById(String beerId) {
+        return beerRepository.deleteById(beerId);
+    }
+
 }

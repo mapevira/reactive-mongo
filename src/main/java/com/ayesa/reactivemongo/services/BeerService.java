@@ -75,4 +75,12 @@ public interface BeerService {
      */
     Mono<BeerDTO> patchBeer(String beerId, BeerDTO beerDTO);
 
+    /**
+     * Deletes a Beer entity with the given ID.
+     *
+     * @param beerId the ID of the beer to delete
+     * @return a Mono emitting the deleted BeerDTO
+     */
+    Mono<Void> deleteBeerById(String beerId);
+
 }

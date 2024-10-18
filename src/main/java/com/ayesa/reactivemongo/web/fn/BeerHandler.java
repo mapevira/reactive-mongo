@@ -20,6 +20,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class BeerHandler {
 
+    public static final String BEER_ID = "beerId";
     private final BeerService beerService;
 
     public Mono<ServerResponse> listBeers(ServerRequest request) {
@@ -28,7 +29,7 @@ public class BeerHandler {
     }
 
     public Mono<ServerResponse> getBeerById(ServerRequest request) {
-        String beerId = request.pathVariable("beerId");
+        String beerId = request.pathVariable(BEER_ID);
         return ServerResponse.ok()
                 .body(beerService.getBeerById(beerId), BeerDTO.class);
     }
@@ -45,7 +46,7 @@ public class BeerHandler {
     }
 
     public Mono<ServerResponse> updateBeer(ServerRequest request) {
-        String beerId = request.pathVariable("beerId");
+        String beerId = request.pathVariable(BEER_ID);
         Mono<BeerDTO> beerDTOMono = request.bodyToMono(BeerDTO.class);
 
         return beerDTOMono.flatMap(beerDTO ->
@@ -57,7 +58,7 @@ public class BeerHandler {
     }
 
     public Mono<ServerResponse> patchBeer(ServerRequest request) {
-        String beerId = request.pathVariable("beerId");
+        String beerId = request.pathVariable(BEER_ID);
         Mono<BeerDTO> beerDTOMono = request.bodyToMono(BeerDTO.class);
 
         return beerDTOMono.flatMap(beerDTO ->
@@ -66,6 +67,13 @@ public class BeerHandler {
                             .noContent().build())
         );
 
+    }
+
+    public Mono<ServerResponse> deleteBeer(ServerRequest request) {
+        String beerId = request.pathVariable(BEER_ID);
+
+        return beerService.deleteBeerById(beerId)
+                .then(ServerResponse.noContent().build());
     }
 
 }
