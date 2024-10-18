@@ -3,9 +3,11 @@ package com.ayesa.reactivemongo.web.fn;
 import com.ayesa.reactivemongo.model.BeerDTO;
 import com.ayesa.reactivemongo.services.BeerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
@@ -31,7 +33,8 @@ public class BeerHandler {
     public Mono<ServerResponse> getBeerById(ServerRequest request) {
         String beerId = request.pathVariable(BEER_ID);
         return ServerResponse.ok()
-                .body(beerService.getBeerById(beerId), BeerDTO.class);
+                .body(beerService.getBeerById(beerId), BeerDTO.class)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
 
     public Mono<ServerResponse> createNewBeer(ServerRequest request) {
@@ -51,6 +54,7 @@ public class BeerHandler {
 
         return beerDTOMono.flatMap(beerDTO ->
             beerService.updateBeer(beerId, beerDTO)
+                    .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
                     .flatMap(saveDTO -> ServerResponse
                             .noContent().build())
         );
@@ -63,6 +67,7 @@ public class BeerHandler {
 
         return beerDTOMono.flatMap(beerDTO ->
             beerService.patchBeer(beerId, beerDTO)
+                    .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
                     .flatMap(saveDTO -> ServerResponse
                             .noContent().build())
         );
@@ -72,8 +77,11 @@ public class BeerHandler {
     public Mono<ServerResponse> deleteBeer(ServerRequest request) {
         String beerId = request.pathVariable(BEER_ID);
 
-        return beerService.deleteBeerById(beerId)
+        return beerService.getBeerById(beerId)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
+                .flatMap(beerDTO -> beerService.deleteBeerById(beerDTO.getId()))
                 .then(ServerResponse.noContent().build());
+
     }
 
 }
