@@ -42,12 +42,9 @@ public class BeerHandler {
     }
 
     public Mono<ServerResponse> listBeers(ServerRequest request) {
-        Flux<BeerDTO> flux;
-
-        if (request.queryParam("beerStyle").isPresent()) {
-            flux = beerService.findByBeerStyle(request.queryParam("beerStyle").get());
-        } else
-            flux = beerService.listBeers();
+        Flux<BeerDTO> flux = request.queryParam("beerStyle")
+                .map(beerService::findByBeerStyle)
+                .orElseGet(beerService::listBeers);
 
         return ServerResponse.ok()
                 .body(flux, BeerDTO.class);
