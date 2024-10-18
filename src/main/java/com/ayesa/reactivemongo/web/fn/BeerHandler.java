@@ -56,4 +56,16 @@ public class BeerHandler {
 
     }
 
+    public Mono<ServerResponse> patchBeer(ServerRequest request) {
+        String beerId = request.pathVariable("beerId");
+        Mono<BeerDTO> beerDTOMono = request.bodyToMono(BeerDTO.class);
+
+        return beerDTOMono.flatMap(beerDTO ->
+            beerService.patchBeer(beerId, beerDTO)
+                    .flatMap(saveDTO -> ServerResponse
+                            .noContent().build())
+        );
+
+    }
+
 }

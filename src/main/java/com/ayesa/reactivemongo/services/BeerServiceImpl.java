@@ -104,4 +104,37 @@ public class BeerServiceImpl implements BeerService {
                 .flatMap(beerRepository::save)
                 .map(beerMapper::beerToBeerDTO);
     }
+
+    /**
+     * Patch a Beer entity with the given ID.
+     *
+     * @param beerId  the ID of the beer to delete
+     * @param beerDTO the BeerDTO containing the details to patch
+     * @return a Mono emitting the deleted BeerDTO
+     */
+    @Override
+    public Mono<BeerDTO> patchBeer(String beerId, BeerDTO beerDTO) {
+        return beerRepository.findById(beerId)
+                .map(beer -> {
+                    if (beerDTO.getBeerName() != null) {
+                        beer.setBeerName(beerDTO.getBeerName());
+                    }
+                    if (beerDTO.getBeerStyle() != null) {
+                        beer.setBeerStyle(beerDTO.getBeerStyle());
+                    }
+                    if (beerDTO.getPrice() != null) {
+                        beer.setPrice(beerDTO.getPrice());
+                    }
+                    if (beerDTO.getUpc() != null) {
+                        beer.setUpc(beerDTO.getUpc());
+                    }
+                    if (beerDTO.getQuantityOnHand() != null) {
+                        beer.setQuantityOnHand(beerDTO.getQuantityOnHand());
+                    }
+                    return beer;
+                })
+                .flatMap(beerRepository::save)
+                .map(beerMapper::beerToBeerDTO);
+    }
+
 }

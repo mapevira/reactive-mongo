@@ -66,4 +66,13 @@ public interface BeerService {
      */
     Mono<BeerDTO> updateBeer(String beerId, BeerDTO beerDTO);
 
+    /**
+     * Patch a Beer entity with the given ID.
+     *
+     * @param beerId the ID of the beer to delete
+     * @param beerDTO the BeerDTO containing the details to patch
+     * @return a Mono emitting the deleted BeerDTO
+     */
+    Mono<BeerDTO> patchBeer(String beerId, BeerDTO beerDTO);
+
 }
